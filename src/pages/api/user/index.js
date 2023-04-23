@@ -30,6 +30,5 @@ export default function Users(req, res) {
   } else if (req.method === "GET") {
     // Get all users
     res.status(200).json(userList);
-    res.setHeader("Content-Type", "application/json");
   }
 }
