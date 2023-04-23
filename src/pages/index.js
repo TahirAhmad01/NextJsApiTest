@@ -7,28 +7,34 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const [userList, setUserList] = useState([]);
   const [userVal, setUser] = useState("");
+  const LastUser = userList.slice(-1)[0];
 
-  useEffect(() => {
+  function getUser() {
     axios.get("/api/user").then((response) => {
-      console.log(response.data);
+      // console.log(response.data);
       setUserList(response.data);
     });
+  }
+
+  useEffect(() => {
+    getUser();
   }, []);
 
   const submitUser = (e) => {
-    console.log(userVal);
+    // console.log(userVal);fsdf
     e.preventDefault();
     axios
       .post(
         "/api/user",
-        { user: userVal },
+        { id: LastUser?.id + 1, name: userVal },
         {
-          "content-type": "application/json",
+          headers: {
+            "content-type": "application/json",
+          },
         }
       )
       .then((response) => {
-        console.log(response.data);
-        setUserList([...userList, response.data]);
+        getUser();
       });
   };
 
@@ -48,7 +54,7 @@ export default function Home() {
       </div>
       <div>
         {userList?.map((user, idx) => (
-          <div key={idx}>{user.name}</div>
+          <div key={idx}>{user?.name}</div>
         ))}
       </div>
     </div>
